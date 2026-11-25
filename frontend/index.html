@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Password Security — Protection &amp; Management Dashboard</title>
+  <meta name="description" content="University project: Password Protection and Management Microservice frontend." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ===================== Sidebar navigation ===================== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar__brand">
+      <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="4" y="10" width="16" height="10" rx="2"/>
+        <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+        <circle cx="12" cy="15" r="1.4" fill="currentColor" stroke="none"/>
+      </svg>
+      <div>
+        <span class="brand-name">Password Security</span>
+        <span class="brand-sub">Microservice Dashboard</span>
+      </div>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Main navigation">
+      <a href="#dashboard" class="nav-link is-active" data-section="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        Dashboard
+      </a>
+      <a href="#strength" class="nav-link" data-section="strength">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 4v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V7z"/><path d="M9 12l2 2 4-4"/></svg>
+        Password Strength
+      </a>
+      <a href="#generator" class="nav-link" data-section="generator">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.3"/><path d="M21 4v5h-5"/></svg>
+        Password Generator
+      </a>
+      <a href="#passphrase" class="nav-link" data-section="passphrase">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+        Passphrase Generator
+      </a>
+      <a href="#twofa" class="nav-link" data-section="twofa">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 9h.01M11 9h.01M15 9h.01M7 13h.01M11 13h.01M15 13h.01M3 21h18"/></svg>
+        Two-Factor Auth
+      </a>
+      <a href="#breach" class="nav-link" data-section="breach">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17.5h.01"/></svg>
+        Breach Checker
+      </a>
+      <a href="#about" class="nav-link" data-section="about">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+        About
+      </a>
+    </nav>
+
+    <div class="sidebar__footer">
+      <span class="dot dot--pulse" aria-hidden="true"></span>
+      Backend: <code id="backend-status">127.0.0.1:8000</code>
+    </div>
+  </aside>
+
+  <div class="sidebar-overlay" id="sidebar-overlay" hidden></div>
+
+  <!-- ===================== Main content ===================== -->
+  <div class="main">
+    <header class="topbar">
+      <button class="topbar__menu" id="menu-btn" aria-label="Open navigation menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <h1 class="topbar__title">Security Operations Dashboard</h1>
+    </header>
+
+    <!-- Security notice -->
+    <div class="notice" role="note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17.5h.01"/></svg>
+      <p><strong>Safety notice:</strong> this is a university demonstration tool. Do <em>not</em> enter passwords you currently use on real accounts. Nothing you type is stored by this frontend — all analysis happens via the FastAPI backend, and sensitive fields are cleared after each operation.</p>
+    </div>
+
+    <!-- ============ 1. Dashboard overview ============ -->
+    <section id="dashboard" class="section is-visible">
+      <div class="section__head">
+        <h2>Dashboard Overview</h2>
+        <p>Five independent microservices for password protection and management, served by the FastAPI backend.</p>
+      </div>
+
+      <div class="card-grid">
+        <a class="card card--link" href="#strength">
+          <div class="card__icon card__icon--cyan">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 4v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V7z"/><path d="M9 12l2 2 4-4"/></svg>
+          </div>
+          <h3>Password Strength Checker</h3>
+          <p>Analyse entropy, length, diversity and guess resistance, with actionable recommendations.</p>
+          <span class="card__cta">Open service →</span>
+        </a>
+
+        <a class="card card--link" href="#generator">
+          <div class="card__icon card__icon--blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.3"/><path d="M21 4v5h-5"/></svg>
+          </div>
+          <h3>Secure Password Generator</h3>
+          <p>Cryptographically secure random passwords of configurable length, ready to copy.</p>
+          <span class="card__cta">Open service →</span>
+        </a>
+
+        <a class="card card--link" href="#passphrase">
+          <div class="card__icon card__icon--violet">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+          </div>
+          <h3>Passphrase Generator</h3>
+          <p>Diceware-style passphrases: multiple random words that are long, strong and memorable.</p>
+          <span class="card__cta">Open service →</span>
+        </a>
+
+        <a class="card card--link" href="#twofa">
+          <div class="card__icon card__icon--green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 9h.01M11 9h.01M15 9h.01M7 13h.01M11 13h.01M15 13h.01M3 21h18"/></svg>
+          </div>
+          <h3>Two-Factor Authentication</h3>
+          <p>TOTP setup with QR code for authenticator apps and six-digit code verification.</p>
+          <span class="card__cta">Open service →</span>
+        </a>
+
+        <a class="card card--link" href="#breach">
+          <div class="card__icon card__icon--red">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17.5h.01"/></svg>
+          </div>
+          <h3>Breached Password Checker</h3>
+          <p>Check passwords against known data breaches using the HIBP k-anonymity method.</p>
+          <span class="card__cta">Open service →</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============ 2. Password Strength ============ -->
+    <section id="strength" class="section">
+      <div class="section__head">
+        <h2><span class="head-icon head-icon--cyan">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 4v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V7z"/><path d="M9 12l2 2 4-4"/></svg>
+        </span>Password Strength Checker</h2>
+        <p>POST <code>/api/password/strength</code> — evaluates length, character diversity and estimated resistance to guessing.</p>
+      </div>
+
+      <div class="panel">
+        <form id="strength-form" autocomplete="off">
+          <label class="field">
+            <span class="field__label">Password to analyse</span>
+            <input type="password" id="strength-input" class="field__input" placeholder="Enter a test password…" required minlength="1" autocomplete="off" />
+          </label>
+          <div class="form-actions">
+            <button type="submit" class="btn btn--primary" id="strength-btn">
+              <span class="btn__label">Analyse strength</span>
+              <span class="btn__spinner" hidden></span>
+            </button>
+            <button type="button" class="btn btn--ghost" data-clear="strength">Clear</button>
+          </div>
+        </form>
+
+        <div class="result" id="strength-result" hidden></div>
+      </div>
+    </section>
+
+    <!-- ============ 3. Password Generator ============ -->
+    <section id="generator" class="section">
+      <div class="section__head">
+        <h2><span class="head-icon head-icon--blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.3"/><path d="M21 4v5h-5"/></svg>
+        </span>Secure Password Generator</h2>
+        <p>POST <code>/api/password/generate</code> — generates a cryptographically secure random password.</p>
+      </div>
+
+      <div class="panel">
+        <form id="generator-form" autocomplete="off">
+          <label class="field">
+            <span class="field__label">Password length <output id="gen-length-out" class="field__output">16</output></span>
+            <input type="range" id="gen-length" class="field__range" min="8" max="64" step="1" value="16" />
+          </label>
+          <div class="form-actions">
+            <button type="submit" class="btn btn--primary" id="generator-btn">
+              <span class="btn__label">Generate password</span>
+              <span class="btn__spinner" hidden></span>
+            </button>
+            <button type="button" class="btn btn--ghost" data-clear="generator">Clear</button>
+          </div>
+        </form>
+
+        <div class="result" id="generator-result" hidden></div>
+      </div>
+    </section>
+
+    <!-- ============ 4. Passphrase Generator ============ -->
+    <section id="passphrase" class="section">
+      <div class="section__head">
+        <h2><span class="head-icon head-icon--violet">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+        </span>Memorable Passphrase Generator</h2>
+        <p>POST <code>/api/passphrase/generate</code> — a Diceware-style passphrase of randomly selected words.</p>
+      </div>
+
+      <div class="panel">
+        <form id="passphrase-form" autocomplete="off">
+          <label class="field">
+            <span class="field__label">Number of words <output id="pass-words-out" class="field__output">5</output></span>
+            <input type="range" id="pass-words" class="field__range" min="4" max="10" step="1" value="5" />
+          </label>
+          <p class="field__hint">Multiple random words produce a passphrase that is both long (strong) and easy to remember.</p>
+          <div class="form-actions">
+            <button type="submit" class="btn btn--primary" id="passphrase-btn">
+              <span class="btn__label">Generate passphrase</span>
+              <span class="btn__spinner" hidden></span>
+            </button>
+            <button type="button" class="btn btn--ghost" data-clear="passphrase">Clear</button>
+          </div>
+        </form>
+
+        <div class="result" id="passphrase-result" hidden></div>
+      </div>
+    </section>
+
+    <!-- ============ 5. Two-Factor Authentication ============ -->
+    <section id="twofa" class="section">
+      <div class="section__head">
+        <h2><span class="head-icon head-icon--green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 9h.01M11 9h.01M15 9h.01M7 13h.01M11 13h.01M15 13h.01M3 21h18"/></svg>
+        </span>Two-Factor Authentication (TOTP)</h2>
+        <p>POST <code>/api/2fa/setup</code> and POST <code>/api/2fa/verify</code> — register a user, scan the QR code, then verify a six-digit code.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step"><span class="step__num">1</span> Enter a username and request a QR code.</div>
+        <div class="step"><span class="step__num">2</span> Scan it with Google Authenticator or Microsoft Authenticator.</div>
+        <div class="step"><span class="step__num">3</span> Enter the six-digit code shown in the app to verify.</div>
+      </div>
+
+      <div class="panel">
+        <form id="twofa-setup-form" autocomplete="off">
+          <label class="field">
+            <span class="field__label">Username</span>
+            <input type="text" id="twofa-username" class="field__input" placeholder="e.g. student01" required minlength="1" autocomplete="off" />
+          </label>
+          <div class="form-actions">
+            <button type="submit" class="btn btn--primary" id="twofa-setup-btn">
+              <span class="btn__label">Generate QR code</span>
+              <span class="btn__spinner" hidden></span>
+            </button>
+            <button type="button" class="btn btn--ghost" data-clear="twofa">Reset</button>
+          </div>
+        </form>
+
+        <div class="result" id="twofa-setup-result" hidden></div>
+
+        <form id="twofa-verify-form" class="verify-form" autocomplete="off">
+          <label class="field">
+            <span class="field__label">Verification code</span>
+            <input type="text" id="twofa-code" class="field__input field__input--code" placeholder="123456" required
+                   inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" />
+          </label>
+          <div class="form-actions">
+            <button type="submit" class="btn btn--primary" id="twofa-verify-btn">
+              <span class="btn__label">Verify code</span>
+              <span class="btn__spinner" hidden></span>
+            </button>
+          </div>
+        </form>
+
+        <div class="result" id="twofa-verify-result" hidden></div>
+      </div>
+    </section>
+
+    <!-- ============ 6. Breach Checker ============ -->
+    <section id="breach" class="section">
+      <div class="section__head">
+        <h2><span class="head-icon head-icon--red">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17.5h.01"/></svg>
+        </span>Breached Password Checker</h2>
+        <p>POST <code>/api/password/breach-check</code> — checks the password against known data breaches via Have I Been Pwned.</p>
+      </div>
+
+      <div class="panel">
+        <div class="info-box">
+          <p><strong>k-anonymity:</strong> the backend sends only the first five characters of the password's SHA-1 hash to HIBP. Your full password is never transmitted to any third party — only an anonymised hash prefix is used to retrieve candidate matches, which are then checked locally on the backend.</p>
+        </div>
+
+        <form id="breach-form" autocomplete="off">
+          <label class="field">
+            <span class="field__label">Password to check</span>
+            <input type="password" id="breach-input" class="field__input" placeholder="Enter a test password…" required minlength="1" autocomplete="off" />
+          </label>
+          <div class="form-actions">
+            <button type="submit" class="btn btn--primary" id="breach-btn">
+              <span class="btn__label">Check for breaches</span>
+              <span class="btn__spinner" hidden></span>
+            </button>
+            <button type="button" class="btn btn--ghost" data-clear="breach">Clear</button>
+          </div>
+        </form>
+
+        <div class="result" id="breach-result" hidden></div>
+      </div>
+    </section>
+
+    <!-- ============ 7. About ============ -->
+    <section id="about" class="section">
+      <div class="section__head">
+        <h2>About this Project</h2>
+      </div>
+      <div class="panel panel--text">
+        <p><strong>Password Protection and Management Microservice</strong> is a university project for a Computer Science degree specialising in Information Security.</p>
+        <p>The system consists of five independent microservices — password strength analysis, secure password generation, memorable passphrase generation (Diceware), time-based one-time password (TOTP) two-factor authentication, and breached-password detection via the Have I Been Pwned k-anonymity API — orchestrated by a <strong>FastAPI</strong> backend and consumed through this web dashboard.</p>
+        <p>The frontend is built with plain HTML5, CSS3 and vanilla JavaScript. It communicates with the backend exclusively over REST (HTTP/JSON) using the Fetch API. Passwords and TOTP codes are never stored in the browser, never written to local storage, and are cleared from memory after each request.</p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>Password Security · Password Protection and Management Microservice</p>
+      <p>University project — Computer Science, Information Security specialisation.</p>
+    </footer>
+  </div>
+
+  <!-- Toast for clipboard / status feedback -->
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
